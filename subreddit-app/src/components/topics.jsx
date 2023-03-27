@@ -7,6 +7,7 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
+import React from "react";
 
 export function Topics() {
   return (

@@ -1,5 +1,6 @@
 import { AppBar, Toolbar, Typography, InputBase } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
+import React from "react";
 
 
 export function Bar() {

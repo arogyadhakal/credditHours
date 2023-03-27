@@ -1,6 +1,7 @@
 import { Card, Stack, Typography, Divider, Slider } from "@mui/material";
 import { Bar } from "../components/bar";
 import { SliderReddit } from "../components/slider";
+import React from "react";
 
 export function Post() {
   return (

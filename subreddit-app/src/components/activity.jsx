@@ -9,8 +9,9 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
+import React from "react";
 
-export function Activity() {
+export function Activity({ posts }) {
   return (
     <>
       <Card sx={{ margin: "5%" }}>
@@ -21,33 +22,17 @@ export function Activity() {
               <Tab label="User"></Tab>
             </Tabs>
             <List component="nav">
-              <ListItem>
-                <ListItemText
-                  primary="Class Registration Fall 2023"
-                  secondary="Posted 12 minutes ago"
-                ></ListItemText>
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListItemText
-                  primary="Comp Sci 2023 Admissions"
-                  secondary="Posted 30 minutes ago"
-                ></ListItemText>
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListItemText
-                  primary="SBP election?"
-                  secondary="Posted 45 minutes ago"
-                ></ListItemText>
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListItemText
-                  primary="Easy 1 credit hour classes"
-                  secondary="Posted an hour ago"
-                ></ListItemText>
-              </ListItem>
+              {posts.map((post, index) => (
+                <React.Fragment key={index}>
+                  <ListItem>
+                    <ListItemText
+                      primary={post.title}
+                      secondary={`Posted ${post.timeAgo}`}
+                    ></ListItemText>
+                  </ListItem>
+                  {index !== posts.length - 1 && <Divider />}
+                </React.Fragment>
+              ))}
             </List>
           </Box>
         </Stack>

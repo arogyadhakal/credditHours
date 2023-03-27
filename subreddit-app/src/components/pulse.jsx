@@ -1,5 +1,6 @@
 import { Card, Box, Stack, Typography } from "@mui/material";
 import { SliderReddit } from "./slider";
+import React from "react";
 
 export function Pulse() {
   return (
