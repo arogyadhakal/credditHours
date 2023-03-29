@@ -1,8 +1,22 @@
 # demo
 
+1.First add your local virtual environment to run Python and the Python libraries
+Navigate to the backend folder by doing "cd backend"
+Run "python -m venv venv" to create the venv folder
 
-Run the backend FastAPI server by running "uvicorn main:app --reload" in the backend directory which would be /demo/backend
+2.Activate the Virtual Environment (make sure you are in the backend directory)
+"venv\Scripts\activate"
 
-Run the frontend React client by running "npm start" in the subreddit-app directory which would be /demo/subreddit-app
+2.Install the dependencies for Python
+"pip install fastapi uvicorn praw transformers torch"
 
+3.Run the backend FastAPI Server
+"uvicorn main:app --reload"
 
+4. Navigate to the subreddit-app folder and run the web app
+   "cd .."
+   "cd subreddit-app"
+   "npm start"
+
+After fully running, the React App will open at localhost:3000
+After fully running, the FastAPI server will open at http://127.0.0.1:8000/docs
