@@ -2,7 +2,6 @@ import { AppBar, Toolbar, Typography, InputBase } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import React from "react";
 
-
 export function Bar() {
   return (
     <>
@@ -16,7 +15,7 @@ export function Bar() {
           >
             cReddit Hours
           </Typography>
-          
+          Data from the last 10 hours
         </Toolbar>
       </AppBar>
     </>

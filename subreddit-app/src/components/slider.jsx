@@ -1,17 +1,14 @@
-import { useState } from "react";
 import { Slider } from "@mui/material";
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 
-export function SliderReddit() {
-
-    const [value, setValue] = useState(20);
-    const changeValue = (event, value) => {
-        setValue(value);
-    }
+export function SliderReddit(props) {
+  let converted_string_to_float = parseFloat(props.value) * 100;
 
   return (
     <>
-      <Slider value={value}></Slider>
+      <Slider value={converted_string_to_float}></Slider>
     </>
   );
 }

@@ -7,27 +7,53 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-export function Topics() {
+function filter_high_value_posts(posts) {
+  if (!posts) {
+    return;
+  }
+  console.log("high value posts", posts);
+  return posts.filter((post) => {
+    const sentiment = post.sentiment_scores;
+    return sentiment > 0.7; //add a negative sentiment
+  });
+}
+
+export function Topics({ posts }) {
+  const [topics, setTopics] = useState();
+
+  useEffect(() => {
+    setTopics(filter_high_value_posts(posts));
+  }, [posts]);
+
   return (
     <>
       <Card sx={{ margin: "5%" }}>
         <Stack sx={{ p: 2, display: "flex" }}>
           <Typography paddingLeft="2%">Topics of Concern</Typography>
-
           <List component="nav">
-            <ListItem>
-              <ListItemText primary="COMP 123? Not fun." secondary="Posted by coolcompsci123"></ListItemText>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Why are we still drinking lead water?" secondary="Posted by angreyredditor"></ListItemText>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText primary="Worst classes to take at UNC" secondary="Posted by tarheelfan123"></ListItemText>
-            </ListItem>
+            {topics &&
+              topics.map((post, index) => (
+                <React.Fragment key={index}>
+                  <ListItem>
+                    <ListItemText
+                      primary={post.title}
+                      secondary={`Posted ${post.timeAgo}`}
+                    ></ListItemText>
+                  </ListItem>
+                  {index !== posts.length - 1 && <Divider />}
+                </React.Fragment>
+              ))}
+            {!topics && (
+              <ListItem>
+                <ListItemText
+                  primary={
+                    "Sorry no high value posts trending in the subreddit currently!"
+                  }
+                ></ListItemText>
+              </ListItem>
+            )}
           </List>
         </Stack>
       </Card>
