@@ -34,7 +34,7 @@ export function Pulse({ posts }) {
           <Stack sx={{ width: "90%" }}>
             <Typography variant="caption">Overall Pulse</Typography>
             <Typography variant="h5" paddingTop="2%">
-              {averageSentiment.toFixed(2)}
+              {averageSentiment}
             </Typography>
             <SliderReddit value={averageSentiment.toFixed(2)}></SliderReddit>
           </Stack>

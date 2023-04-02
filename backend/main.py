@@ -29,7 +29,7 @@ def analyze_sentiment(posts):
     for post in posts:
         positive = 0
         negative = 0
-        text = [post.title + " " + post.selftext]          
+        text = (post.title + " " + post.selftext)[:512]  # Truncate the text to 512 characters
         for result in nlp(text):
             label = result['label']
             score = result['score']
@@ -38,10 +38,11 @@ def analyze_sentiment(posts):
                 positive += score
             else:
                 negative += score
-        avg_positive = positive/len(text)
+        avg_positive = positive / len(text)
         output.append(avg_positive)
 
     return output
+
 
 @app.get("/subreddit/{subreddit_name}")
 def get_subreddit_posts(subreddit_name: str, limit: int = 100):
