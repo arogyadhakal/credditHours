@@ -8,7 +8,7 @@ Run "python -m venv venv" to create the venv folder
 "venv\Scripts\activate"
 
 2.Install the dependencies for Python
-"pip install fastapi uvicorn praw transformers torch"
+"pip install fastapi uvicorn praw transformers torch tensorflow"
 
 3.Run the backend FastAPI Server
 "uvicorn main:app --reload"
