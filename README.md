@@ -1,19 +1,19 @@
 # demo
 
-1.First add your local virtual environment to run Python and the Python libraries
+1. First add your local virtual environment to run Python and the Python libraries
 Navigate to the backend folder by doing "cd backend"
 Run "python -m venv venv" to create the venv folder
 
-2.Activate the Virtual Environment (make sure you are in the backend directory)
+2. Activate the Virtual Environment (make sure you are in the backend directory)
 "venv\Scripts\activate"
 
-2.Install the dependencies for Python
+3. Install the dependencies for Python
 "pip install fastapi uvicorn praw transformers torch tensorflow"
 
-3.Run the backend FastAPI Server
+4. Run the backend FastAPI Server
 "uvicorn main:app --reload"
 
-4. Navigate to the subreddit-app folder and run the web app
+5. Navigate to the subreddit-app folder and run the web app
    "cd .."
    "cd subreddit-app"
    "npm start"
