@@ -25,22 +25,21 @@ nlp = pipeline("sentiment-analysis")
 
 # creates a single sentiment score for all the posts
 def analyze_sentiment(posts):
-    output = []
     for post in posts:
         positive = 0
         negative = 0
         text = (post.title + " " + post.selftext)[:512]  # Truncate the text to 512 characters
-        for result in nlp(text):
-            label = result['label']
-            score = result['score']
-
-            if label == 'POSITIVE':
-                positive += score
-            else:
-                negative += score
-        avg_positive = positive / len(text)
-        output.append(avg_positive)
-
+        if len(nlp(text)) > 1:
+            print(f'more than 1: {nlp(text)}')
+        result = nlp(text)[0]
+        label = result['label']
+        score = result['score']
+        if label == 'POSITIVE':
+            positive += score
+        else:
+            negative += score
+    output = positive / len(posts)
+    print(output)
     return output
 
 
@@ -59,7 +58,6 @@ def get_subreddit_posts(subreddit_name: str, limit: int = 100):
         if post.created_utc >= ten_hours_ago
     ]
     
-    sentiment_scores = analyze_sentiment(posts)
     scored_posts = []
     j = 0
     for post in posts:
@@ -69,7 +67,7 @@ def get_subreddit_posts(subreddit_name: str, limit: int = 100):
             "link": post.url,
             "score": post.score,
             "created_utc": post.created_utc,
-            "sentiment_scores": sentiment_scores[j]
+            "sentiment_scores": analyze_sentiment([post])
          })
          j += 1
 

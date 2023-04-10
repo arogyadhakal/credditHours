@@ -20,6 +20,7 @@ export function Pulse({ posts }) {
   let averageSentiment;
   if (posts) {
     averageSentiment = calculateAverageSentiment(posts);
+    averageSentiment = Math.round(averageSentiment * 100) / 100
     console.log("average Sentiment", averageSentiment);
     // setAverageSentiment(average);
   } else {
@@ -31,12 +32,12 @@ export function Pulse({ posts }) {
     <>
       <Card sx={{ margin: "5%" }}>
         <Box sx={{ p: 2, display: "flex" }}>
-          <Stack sx={{ width: "90%" }}>
+          <Stack sx={{ width: 1 }}>
             <Typography variant="caption">Overall Pulse</Typography>
             <Typography variant="h5" paddingTop="2%">
               {averageSentiment}
             </Typography>
-            <SliderReddit value={averageSentiment.toFixed(2)}></SliderReddit>
+            <SliderReddit value={averageSentiment}></SliderReddit>
           </Stack>
         </Box>
       </Card>
