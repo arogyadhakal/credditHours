@@ -6,8 +6,10 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  Tab
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function filter_high_value_posts(posts) {
   if (!posts) {
@@ -31,14 +33,23 @@ export function Topics({ posts }) {
     <>
       <Card sx={{ margin: "5%" }}>
         <Stack sx={{ p: 2, display: "flex" }}>
-          <Typography paddingLeft="2%">Topics of Concern</Typography>
+          <Typography
+           paddingLeft="2%"
+          >Topics of Concern</Typography>
           <List component="nav">
             {topics &&
               topics.map((post, index) => (
                 <React.Fragment key={index}>
                   <ListItem>
                     <ListItemText
-                      primary={post.title}
+                      primary={
+                        <Link
+                          to={`/post/?q=${post.title}`}
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          {post.title}
+                        </Link>
+                      }
                       secondary={`Posted ${post.timeAgo}`}
                     ></ListItemText>
                   </ListItem>

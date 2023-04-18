@@ -36,7 +36,7 @@ export function Activity({ posts }) {
                       <ListItemText
                         primary={
                           <Link
-                            to={post.link}
+                            to={`/post/?q=${post.title}`}
                             style={{ textDecoration: "none", color: "inherit" }}
                           >
                             {post.title}

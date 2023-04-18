@@ -1,8 +1,10 @@
 import { AppBar, Toolbar, Typography, InputBase } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
+import { Search } from './search'
+import { Link } from 'react-router-dom';
 import React from "react";
 
-export function Bar() {
+export function Bar({ posts }) {
   return (
     <>
       <AppBar position="static">
@@ -13,9 +15,12 @@ export function Bar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            cReddit Hours
+            <Link 
+              to={'/'}
+              style={{ textDecoration: "none", color: "inherit" }}>cReddit Hours
+            </Link>
           </Typography>
-          Data from the last 10 hours
+          <Search posts={posts}/>
         </Toolbar>
       </AppBar>
     </>

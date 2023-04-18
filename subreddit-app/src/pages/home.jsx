@@ -3,8 +3,12 @@ import { Bar } from "../components/bar";
 import { Pulse } from "../components/pulse";
 import { Topics } from "../components/topics";
 import { Activity } from "../components/activity";
+import { Search } from "../components/search";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
+import { db } from '../firebase/firebase'
+import { collections, getDocs } from 'firebase/firestore' 
 
 export function Home() {
   const [subredditData, setSubredditData] = useState({});
@@ -37,7 +41,9 @@ export function Home() {
   return (
     <>
       <Grid>
-        <Bar />
+        <Bar posts={subredditData.posts || []}> 
+          <Search posts={subredditData.posts || []} />
+        </Bar>
         <Pulse posts={subredditData.posts || []} />
         <Topics posts={subredditData.posts || []} />
         <Activity posts={subredditData.posts || []} />
