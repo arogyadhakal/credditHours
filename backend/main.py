@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from reddit import reddit
 from transformers import pipeline
+from nltk.sentiment import SentimentIntensityAnalyzer
 
 app = FastAPI()
 
@@ -19,28 +20,42 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize the sentiment intensity analyzer
+sia = SentimentIntensityAnalyzer()
+
+def analyze_sentiment(posts):
+    result = 0
+    finalresult = 0
+    for post in posts:
+        text = (post.title + " " + post.selftext)
+        result = sia.polarity_scores(text)
+        finalresult = result['compound']
+    print(finalresult)
+    return finalresult
+
+
 
 # Initialize the sentiment analysis pipeline
-nlp = pipeline("sentiment-analysis")
+#nlp = pipeline("sentiment-analysis")
 
 # creates a single sentiment score for all the posts
-def analyze_sentiment(posts):
-    for post in posts:
-        positive = 0
-        negative = 0
-        text = (post.title + " " + post.selftext)[:512]  # Truncate the text to 512 characters
-        if len(nlp(text)) > 1:
-            print(f'more than 1: {nlp(text)}')
-        result = nlp(text)[0]
-        label = result['label']
-        score = result['score']
-        if label == 'POSITIVE':
-            positive += score
-        else:
-            negative += score
-    output = (negative - positive) / len(posts)
-    print(output)
-    return output
+#def analyze_sentiment(posts):
+#    for post in posts:
+#        positive = 0
+#        negative = 0
+#        text = (post.title + " " + post.selftext)[:512]  # Truncate the text to 512 characters
+#        if len(nlp(text)) > 1:
+#            print(f'more than 1: {nlp(text)}')
+#        result = nlp(text)[0]
+#        label = result['label']
+#        score = result['score']
+#        if label == 'POSITIVE':
+#            positive += score
+#        else:
+#            negative += score
+#    output = (negative - positive) / len(posts)
+#    print(output)
+#    return output
 
 
 @app.get("/subreddit/{subreddit_name}")

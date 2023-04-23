@@ -3,7 +3,7 @@ import { Bar } from "../components/bar";
 import { SliderReddit } from "../components/slider";
 import React from 'react'
 import { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { db } from '../firebase/firebase'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 
@@ -12,9 +12,11 @@ export function Post() {
 
   const [postTitle, setPostTitle] = useState(null)
   const [postAuthor, setPostAuthor] = useState(null)
-  const [postSentiment, setPostSentiment] = useState(null)
+  const [postSentimentScore, setPostSentimentScore] = useState(null)
   const [postContent, setPostContent] = useState(null)
   const [displayPostSentiment, setDisplayPostSentiment] = useState(null)
+  const [postSentiment, setPostSentiment] = useState(null)
+  const [postLink, setPostLink] = useState(null)
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -30,14 +32,24 @@ export function Post() {
           const temp = doc.data()
           const tempTitle = temp['title']
           const tempAuthor = temp['author']
-          const tempSentiment = temp['sentiment_scores']
+          const tempSentimentScore = temp['sentiment_scores']
           const tempContent = temp['selftext']
-          const tempDisplayPostSentiment = Math.round(tempSentiment * 100) / 100
+          const tempLink = temp['link']
+          const tempDisplayPostSentiment = Math.round(tempSentimentScore * 100) / 100
+          let tempSentiment = "Negative"
+          if (tempSentimentScore > 0.0) {
+            tempSentiment = "Positive"
+          }
+          else if (tempSentimentScore == 0.0) {
+            tempSentiment = "Neutral"
+          }
+          setPostSentiment(tempSentiment)
           setPostTitle(tempTitle)
           setPostAuthor(tempAuthor)
-          setPostSentiment(tempSentiment)
+          setPostSentimentScore(tempSentimentScore)
           setPostContent(tempContent)
           setDisplayPostSentiment(tempDisplayPostSentiment)
+          setPostLink(tempLink)
         })
       }
       
@@ -60,9 +72,18 @@ export function Post() {
             </Typography>
             <Divider />
             <Typography variant="h6" padding="2%" id="pulse">
-            {displayPostSentiment}
+              {postSentiment}: {displayPostSentiment}
             </Typography>
-            <SliderReddit value={postSentiment}></SliderReddit>
+            <SliderReddit value={postSentimentScore}></SliderReddit>
+            <Divider />
+            <Typography padding="2%" id="link">
+              <Link
+                to={`${postLink}`}
+                style={{ color: "inherit" }}
+              >
+                Link to post on Reddit
+              </Link>
+            </Typography>
           </Stack>
         </Card>
     </>

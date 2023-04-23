@@ -45,7 +45,7 @@ export function Activity({ posts }) {
                         secondary={`Posted ${post.timeAgo}`}
                       ></ListItemText>
                       <Box sx={{ marginLeft: "auto" }}>
-                        <ListItemText primary={`Score: ${post.score}`} />
+                        <ListItemText primary={`Upvotes: ${post.score}`} />
                       </Box>
                     </ListItem>
                     {index !== posts.length - 1 && <Divider />}

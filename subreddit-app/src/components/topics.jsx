@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Box,
   Divider
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -17,7 +18,7 @@ function filter_high_value_posts(posts) {
   console.log("high value posts", posts);
   return posts.filter((post) => {
     const sentiment = post.sentiment_scores;
-    return sentiment < 0.0; //add a negative sentiment
+    return sentiment <= 0.0; //add a negative sentiment
   });
 }
 
@@ -51,6 +52,9 @@ export function Topics({ posts }) {
                       }
                       secondary={`Posted ${post.timeAgo}`}
                     ></ListItemText>
+                    <Box sx={{ marginLeft: "auto" }}>
+                      <ListItemText primary={`Upvotes: ${post.score}`} />
+                    </Box>
                   </ListItem>
                   {index !== posts.length - 1 && <Divider />}
                 </React.Fragment>

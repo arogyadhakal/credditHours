@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { List, ListItem, ListItemText } from '@mui/material';
+import { db } from '../firebase/firebase'
+import { collection, query, where, getDocs } from 'firebase/firestore'
 
 export function Search({ posts }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -8,7 +10,7 @@ export function Search({ posts }) {
   const searchPosts = () => {
     console.log('Posts:', posts)
     const filteredPosts = posts.filter((post) =>
-      post.id 
+      post.title && post.title.toLowerCase().includes(searchQuery.toLowerCase()) 
     );
     return filteredPosts.slice(0,5);
   };

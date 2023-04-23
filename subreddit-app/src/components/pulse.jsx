@@ -2,6 +2,10 @@ import { Card, Box, Stack, Typography } from "@mui/material";
 import { SliderReddit } from "./slider";
 import React from "react";
 
+/* Only gathers the overall pulse from the posts that are fetched, not within the database.
+ This will show the current overall pulse of the subreddit.
+ */
+
 function calculateAverageSentiment(posts) {
   if (posts.length === 0) {
     return 0;
