@@ -64,6 +64,7 @@ def get_subreddit_posts(subreddit_name: str, limit: int = 100):
          scored_posts.append({
             "title": post.title,
             "id": post.id,
+            "selftext": post.selftext,
             "author": post.author.name,
             "link": post.url,
             "score": post.score,

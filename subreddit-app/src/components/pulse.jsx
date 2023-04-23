@@ -1,7 +1,6 @@
 import { Card, Box, Stack, Typography } from "@mui/material";
 import { SliderReddit } from "./slider";
 import React from "react";
-import { useState } from "react";
 
 function calculateAverageSentiment(posts) {
   if (posts.length === 0) {

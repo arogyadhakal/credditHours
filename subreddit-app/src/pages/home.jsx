@@ -7,7 +7,7 @@ import { Search } from "../components/search";
 import React, { useState, useEffect } from "react";
 
 import { db } from '../firebase/firebase'
-import { collection, addDoc, getDoc, getDocs, where, query } from 'firebase/firestore' 
+import { collection, addDoc, getDocs, where, query } from 'firebase/firestore' 
 
 export function Home() {
   const [subredditData, setSubredditData] = useState({});
@@ -32,7 +32,7 @@ export function Home() {
         const postId = post.id
         const query1 = query(postsCollectionRef, where('id', '==', postId))
         const querySnapshot = await getDocs(query1)
-        if (querySnapshot.size == 0) {
+        if (querySnapshot.size === 0) {
           await addDoc(postsCollectionRef, post)
         }
       }

@@ -43,7 +43,7 @@ export function Topics({ posts }) {
                     <ListItemText
                       primary={
                         <Link
-                          to={`/post/?q=${post.title}`}
+                          to={`/post/${post.id}`}
                           style={{ textDecoration: "none", color: "inherit" }}
                         >
                           {post.title}

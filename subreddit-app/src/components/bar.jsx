@@ -1,5 +1,4 @@
-import { AppBar, Toolbar, Typography, InputBase } from "@mui/material";
-import { styled, alpha } from "@mui/material/styles";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 import { Search } from './search'
 import { Link } from 'react-router-dom';
 import React from "react";

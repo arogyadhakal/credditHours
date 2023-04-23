@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { List, ListItem, ListItemText, IconButton, SearchIcon, TextField } from '@mui/material';
+import { List, ListItem, ListItemText } from '@mui/material';
 
 export function Search({ posts }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -8,7 +8,7 @@ export function Search({ posts }) {
   const searchPosts = () => {
     console.log('Posts:', posts)
     const filteredPosts = posts.filter((post) =>
-      post.title && post.title.toLowerCase().includes(searchQuery.toLowerCase())
+      post.id 
     );
     return filteredPosts.slice(0,5);
   };
@@ -23,7 +23,7 @@ export function Search({ posts }) {
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search"
       />
-      <Link to={`/posts/?q=${searchQuery}`}></Link>
+      <Link to={`/posts/${searchQuery}`}></Link>
         <List>
         {searchQuery && (
           <div style={{ position: 'absolute', top: '100%', left: 0, width: '100%', maxWidth: '500px', padding: '10px', backgroundColor: '#f1f1f1', border: '1px solid #ccc', borderRadius: '5px', zIndex: 9999 }}>
@@ -34,7 +34,7 @@ export function Search({ posts }) {
                   <ListItemText
                     primary={
                       <Link 
-                        to={`/post/?q=${post.title}`}
+                        to={`/post/${post.id}`}
                         style={{ textDecoration: "none", color: "black" }}>
                         {post.title.length > 50 ? post.title.slice(0, 50) + "..." : post.title}
                       </Link>
