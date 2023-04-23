@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { List, ListItem, ListItemText } from '@mui/material';
+import { List, ListItem, ListItemText, IconButton, SearchIcon, TextField } from '@mui/material';
 
 export function Search({ posts }) {
-const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const searchPosts = () => {
     console.log('Posts:', posts)

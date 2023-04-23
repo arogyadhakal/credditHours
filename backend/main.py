@@ -38,7 +38,7 @@ def analyze_sentiment(posts):
             positive += score
         else:
             negative += score
-    output = positive / len(posts)
+    output = (negative - positive) / len(posts)
     print(output)
     return output
 
@@ -49,13 +49,13 @@ def get_subreddit_posts(subreddit_name: str, limit: int = 100):
     
     # Get the current time and calculate the timestamp for 10 hours ago
     current_time = int(time.time())
-    ten_hours_ago = current_time - (100 * 60 * 60)
+    twentyfour_hours_ago = current_time - (24 * 60 * 60)
 
     # Fetch posts and filter those submitted in the last 10 hours
     posts = [
         post
         for post in subreddit.new(limit=limit)
-        if post.created_utc >= ten_hours_ago
+        if post.created_utc >= twentyfour_hours_ago
     ]
     
     scored_posts = []
@@ -63,6 +63,7 @@ def get_subreddit_posts(subreddit_name: str, limit: int = 100):
     for post in posts:
          scored_posts.append({
             "title": post.title,
+            "id": post.id,
             "author": post.author.name,
             "link": post.url,
             "score": post.score,

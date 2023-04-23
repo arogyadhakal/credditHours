@@ -5,10 +5,9 @@ import { Topics } from "../components/topics";
 import { Activity } from "../components/activity";
 import { Search } from "../components/search";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
 import { db } from '../firebase/firebase'
-import { collections, getDocs } from 'firebase/firestore' 
+import { collection, addDoc, getDoc, getDocs, where, query } from 'firebase/firestore' 
 
 export function Home() {
   const [subredditData, setSubredditData] = useState({});
@@ -27,6 +26,17 @@ export function Home() {
         return { ...post, timeAgo: `${timeAgo} minutes ago` };
       });
 
+      // Add new posts to database collection
+      const postsCollectionRef = collection(db, 'posts')
+      for (const post of postsWithTimeAgo) {
+        const postId = post.id
+        const query1 = query(postsCollectionRef, where('id', '==', postId))
+        const querySnapshot = await getDocs(query1)
+        if (querySnapshot.size == 0) {
+          await addDoc(postsCollectionRef, post)
+        }
+      }
+      
       setSubredditData({ ...data, posts: postsWithTimeAgo });
     } catch (error) {
       console.error("Error fetching subreddit posts:", error);

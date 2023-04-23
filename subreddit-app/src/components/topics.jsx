@@ -5,8 +5,7 @@ import {
   List,
   ListItem,
   ListItemText,
-  Divider,
-  Tab
+  Divider
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -18,7 +17,7 @@ function filter_high_value_posts(posts) {
   console.log("high value posts", posts);
   return posts.filter((post) => {
     const sentiment = post.sentiment_scores;
-    return sentiment > 0.7; //add a negative sentiment
+    return sentiment < 0.0; //add a negative sentiment
   });
 }
 
