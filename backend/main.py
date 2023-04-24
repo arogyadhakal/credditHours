@@ -1,4 +1,5 @@
 import time
+import nltk
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from reddit import reddit
@@ -20,6 +21,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+nltk.download('vader_lexicon')
 # Initialize the sentiment intensity analyzer
 sia = SentimentIntensityAnalyzer()
 
