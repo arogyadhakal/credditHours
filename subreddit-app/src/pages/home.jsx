@@ -5,14 +5,20 @@ import { Topics } from "../components/topics";
 import { Activity } from "../components/activity";
 import { Search } from "../components/search";
 import React, { useState, useEffect } from "react";
+import Autocomplete from "@mui/lab/Autocomplete";
+import TextField from "@mui/material/TextField";
 
-import { db } from '../firebase/firebase'
-import { collection, addDoc, getDocs, where, query } from 'firebase/firestore' 
+import { db } from "../firebase/firebase";
+import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
 
 export function Home() {
   const [subredditData, setSubredditData] = useState({});
+  const [subreddit, setSubreddit] = useState("");
+
+  const subredditOptions = ["UNC", "mildlyinfuriating"];
 
   const fetchSubredditPosts = async (subredditName) => {
+    if (!subredditName) return;
     try {
       const response = await fetch(
         `http://127.0.0.1:8000/subreddit/${subredditName}`
@@ -27,33 +33,53 @@ export function Home() {
       });
 
       // Add new posts to database collection
-      const postsCollectionRef = collection(db, 'posts')
+      const postsCollectionRef = collection(db, "posts");
       for (const post of postsWithTimeAgo) {
-        const postId = post.id
-        const query1 = query(postsCollectionRef, where('id', '==', postId))
-        const querySnapshot = await getDocs(query1)
+        const postId = post.id;
+        const query1 = query(postsCollectionRef, where("id", "==", postId));
+        const querySnapshot = await getDocs(query1);
         if (querySnapshot.size === 0) {
-          await addDoc(postsCollectionRef, post)
+          await addDoc(postsCollectionRef, post);
         }
       }
-      
+
       setSubredditData({ ...data, posts: postsWithTimeAgo });
     } catch (error) {
       console.error("Error fetching subreddit posts:", error);
     }
   };
 
-  useEffect(() => {
-    fetchSubredditPosts("UNC");
-    console.log(subredditData);
-  }, []);
+  const handleOptionClick = (option) => {
+    if (option) {
+      setSubreddit(typeof option === "string" ? option : option.label);
+    } else {
+      setSubreddit(null);
+    }
+  };
 
+  useEffect(() => {
+    if (subreddit) {
+      fetchSubredditPosts(subreddit);
+    }
+  }, [subreddit]);
+
+  console.log(subreddit);
   return (
     <>
       <Grid>
-        <Bar posts={subredditData.posts || []}> 
-          <Search posts={subredditData.posts || []} />
+        <Bar posts={subredditData.posts || []} subreddit={subreddit}>
+          {/* {subreddit && <Search subreddit={subreddit} />} */}
         </Bar>
+        <Autocomplete
+          freeSolo
+          disablePortal
+          id="combo-box-demo"
+          options={subredditOptions}
+          sx={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Subreddits" />}
+          onChange={(event, option) => handleOptionClick(option)}
+          isOptionEqualToValue={(option, value) => option.label === value.label}
+        />
         <Pulse posts={subredditData.posts || []} />
         <Topics posts={subredditData.posts || []} />
         <Activity posts={subredditData.posts || []} />

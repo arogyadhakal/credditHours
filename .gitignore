@@ -4,13 +4,13 @@
 subreddit-app/node_modules
 /.pnp
 .pnp.js
-backend/venv/
+backend/new_venv/
 
 # testing
 /coverage
 
 # production
-/backend/venv
+/backend/new_venv
 /build
 
 # misc

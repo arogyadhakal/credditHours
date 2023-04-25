@@ -87,7 +87,8 @@ def get_subreddit_posts(subreddit_name: str, limit: int = 100):
             "link": post.url,
             "score": post.score,
             "created_utc": post.created_utc,
-            "sentiment_scores": analyze_sentiment([post])
+            "sentiment_scores": analyze_sentiment([post]),
+            "subreddit": post.subreddit.display_name
          })
          j += 1
 
