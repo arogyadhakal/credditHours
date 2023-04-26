@@ -64,6 +64,10 @@ def analyze_sentiment(posts):
 @app.get("/subreddit/{subreddit_name}")
 def get_subreddit_posts(subreddit_name: str, limit: int = 100):
     subreddit = reddit.subreddit(subreddit_name)
+
+    # Check if the subreddit is NSFW
+    if subreddit.over18:
+        return {"error": "NSFW subreddits are not allowed"}
     
     # Get the current time and calculate the timestamp for 10 hours ago
     current_time = int(time.time())
@@ -73,7 +77,7 @@ def get_subreddit_posts(subreddit_name: str, limit: int = 100):
     posts = [
         post
         for post in subreddit.new(limit=limit)
-        if post.created_utc >= twentyfour_hours_ago
+        if post.created_utc >= twentyfour_hours_ago and not post.over_18
     ]
     
     scored_posts = []
@@ -97,4 +101,3 @@ def get_subreddit_posts(subreddit_name: str, limit: int = 100):
 
     
     return {"subreddit": subreddit_name, "posts": scored_posts}
-

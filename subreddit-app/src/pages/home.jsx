@@ -23,11 +23,13 @@ export function Home() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [validationError, setValidationError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [fetchError, setFetchError] = useState(false);
 
   const subredditOptions = ["UNC", "mildlyinfuriating"];
 
   const fetchSubredditPosts = async (subredditName) => {
     if (!subredditName) return;
+    setFetchError(false); // Reset fetch error before each fetch attempt
     try {
       const response = await fetch(
         `http://127.0.0.1:8000/subreddit/${subredditName}`
@@ -38,6 +40,14 @@ export function Home() {
       }
 
       const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      if (!data.posts || data.posts.length === 0) {
+        throw new Error("No posts found for this subreddit.");
+      }
+
       const current_time = Math.floor(Date.now() / 1000);
 
       // Calculate timeAgo for each post
@@ -59,21 +69,30 @@ export function Home() {
 
       setSubredditData({ ...data, posts: postsWithTimeAgo });
       setErrorMessage(null); // Reset the error message on successful fetch
+      setSuccessMessage("Success! Your data is being processed."); // Set the success message here
     } catch (error) {
       console.error("Error fetching subreddit posts:", error);
-      setErrorMessage("Invalid subreddit name, please try again.");
+      setErrorMessage(error.message);
+      setFetchError(true); // Set fetch error to true when an error occurs
     }
   };
 
-  const handleOptionClick = (option) => {
+  const handleOptionClick = async (option) => {
     if (option) {
       const subredditName = typeof option === "string" ? option : option.label;
       if (/\s/.test(subredditName)) {
         setValidationError("Subreddit names cannot contain spaces.");
       } else {
         setSubreddit(subredditName);
-        setSuccessMessage("Success! Your data is being processed.");
         setValidationError(null);
+
+        // Fetch subreddit data and show success message on successful fetch
+        try {
+          await fetchSubredditPosts(subredditName);
+        } catch (error) {
+          console.error("Error fetching subreddit posts:", error);
+          setErrorMessage(error.message);
+        }
       }
     } else {
       setSubreddit(null);
@@ -151,7 +170,7 @@ export function Home() {
           </MuiAlert>
         </Snackbar>
         <Snackbar
-          open={!!successMessage}
+          open={!!successMessage && !fetchError} // Only show success message when there's no fetch error
           autoHideDuration={6000}
           onClose={() => setSuccessMessage(null)}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
