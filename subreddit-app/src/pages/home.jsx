@@ -18,6 +18,7 @@ export function Home() {
   const [subredditData, setSubredditData] = useState({});
   const [subreddit, setSubreddit] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const [validationError, setValidationError] = useState(null);
 
   const subredditOptions = ["UNC", "mildlyinfuriating"];
 
@@ -62,7 +63,13 @@ export function Home() {
 
   const handleOptionClick = (option) => {
     if (option) {
-      setSubreddit(typeof option === "string" ? option : option.label);
+      const subredditName = typeof option === "string" ? option : option.label;
+      if (/\s/.test(subredditName)) {
+        setValidationError("Subreddit names cannot contain spaces.");
+      } else {
+        setSubreddit(subredditName);
+        setValidationError(null);
+      }
     } else {
       setSubreddit(null);
     }
@@ -91,10 +98,17 @@ export function Home() {
           onChange={(event, option) => handleOptionClick(option)}
           isOptionEqualToValue={(option, value) => option.label === value.label}
         />
-        <PulseLineGraph posts={subredditData.posts || []} />
-        <Pulse posts={subredditData.posts || []} />
-        <Topics posts={subredditData.posts || []} />
-        <Activity posts={subredditData.posts || []} />
+        {subredditData.posts && (
+          <>
+            <PulseLineGraph posts={subredditData.posts || []} />
+            <Pulse posts={subredditData.posts || []} />
+            <Topics posts={subredditData.posts || []} />
+            <Activity posts={subredditData.posts || []} />
+          </>
+        )}
+        {!subredditData.posts && (
+          <div>Please choose a subreddit to analyze or type one in!</div>
+        )}
         <Snackbar
           open={!!errorMessage}
           autoHideDuration={6000}
@@ -108,6 +122,21 @@ export function Home() {
             variant="filled"
           >
             {errorMessage}
+          </MuiAlert>
+        </Snackbar>
+        <Snackbar
+          open={!!validationError}
+          autoHideDuration={6000}
+          onClose={() => setValidationError(null)}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <MuiAlert
+            onClose={() => setValidationError(null)}
+            severity="error"
+            elevation={6}
+            variant="filled"
+          >
+            {validationError}
           </MuiAlert>
         </Snackbar>
       </Grid>
