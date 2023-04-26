@@ -18,7 +18,7 @@ function filter_high_value_posts(posts) {
   console.log("high value posts", posts);
   return posts.filter((post) => {
     const sentiment = post.sentiment_scores;
-    return sentiment <= 0.0; //add a negative sentiment
+    return sentiment < 0.0; //add a negative sentiment
   });
 }
 
@@ -34,7 +34,8 @@ export function Topics({ posts }) {
       <Card sx={{ margin: "5%" }}>
         <Stack sx={{ p: 2, display: "flex" }}>
           <Typography
-           paddingLeft="2%"
+           variant="caption"
+           
           >Topics of Concern</Typography>
           <List component="nav">
             {topics &&

@@ -3,7 +3,6 @@ import { Bar } from "../components/bar";
 import { Pulse } from "../components/pulse";
 import { Topics } from "../components/topics";
 import { Activity } from "../components/activity";
-import { Search } from "../components/search";
 import { PulseLineGraph } from "../components/graph";
 import React, { useState, useEffect } from "react";
 import Autocomplete from "@mui/lab/Autocomplete";
@@ -14,18 +13,21 @@ import MuiAlert from "@mui/material/Alert";
 import { db } from "../firebase/firebase";
 import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
 
-export function Home() {
+let subredditVar = ""
+
+function Home() {
   const [subredditData, setSubredditData] = useState({
     subreddit: "UNC",
     posts: [],
   });
-  const [subreddit, setSubreddit] = useState("UNC");
+  let [subreddit, setSubreddit] = useState("UNC");
   const [errorMessage, setErrorMessage] = useState(null);
   const [validationError, setValidationError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [fetchError, setFetchError] = useState(false);
 
   const subredditOptions = ["UNC", "mildlyinfuriating"];
+
 
   const fetchSubredditPosts = async (subredditName) => {
     if (!subredditName) return;
@@ -103,37 +105,40 @@ export function Home() {
     if (subreddit) {
       fetchSubredditPosts(subreddit);
     }
+    subredditVar = subreddit
   }, [subreddit]);
 
   useEffect(() => {
     if (subreddit) {
       fetchSubredditPosts(subreddit);
     }
+    subredditVar = subreddit
   }, []); // Run only once on mount
+
 
   console.log(subreddit);
   return (
     <>
       <Grid>
-        <Bar posts={subredditData.posts || []} subreddit={subreddit}>
-          {/* {subreddit && <Search subreddit={subreddit} />} */}
-        </Bar>
-        <Autocomplete
-          freeSolo
-          disablePortal
-          id="combo-box-demo"
-          options={subredditOptions}
-          sx={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="UNC" />}
-          onChange={(event, option) => handleOptionClick(option)}
-          isOptionEqualToValue={(option, value) => option.label === value.label}
-        />
+          <Bar posts={subredditData.posts || []} subreddit={subreddit} />
+          <div style={{ margin: '2%', display: 'flex', justifyContent: 'center' }}>
+            <Autocomplete
+                freeSolo
+                disablePortal
+                id="combo-box-demo"
+                options={subredditOptions}
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Choose a subreddit" sx={{backgroundColor: 'white', borderRadius: '5px'}}/>}
+                onChange={(event, option) => handleOptionClick(option)}
+                isOptionEqualToValue={(option, value) => option.label === value.label}
+            />
+          </div>
         {subredditData.posts && (
           <>
-            <PulseLineGraph posts={subredditData.posts || []} />
-            <Pulse posts={subredditData.posts || []} />
-            <Topics posts={subredditData.posts || []} />
-            <Activity posts={subredditData.posts || []} />
+              <Pulse posts={subredditData.posts || []} />
+              <PulseLineGraph posts={subredditData.posts || []} />
+              <Topics posts={subredditData.posts || []} />
+              <Activity posts={subredditData.posts || []} />
           </>
         )}
         {!subredditData.posts && (
@@ -187,4 +192,7 @@ export function Home() {
       </Grid>
     </>
   );
+
 }
+
+export {subredditVar, Home}

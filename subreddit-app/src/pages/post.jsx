@@ -1,11 +1,13 @@
 import { Card, Stack, Typography, Divider } from "@mui/material";
 import { Bar } from "../components/bar";
+import { Search } from "../components/search";
 import { SliderReddit } from "../components/slider";
 import React from 'react'
 import { useState, useEffect } from "react";
 import { Link, useParams } from 'react-router-dom'
 import { db } from '../firebase/firebase'
 import { collection, getDocs, query, where } from 'firebase/firestore'
+import { subredditVar } from './home'
 
 export function Post() {
   const { postId } = useParams()
@@ -59,7 +61,9 @@ export function Post() {
 
   return (
     <>
-        <Bar />
+        <Bar subreddit={subredditVar}> 
+          <Search subreddit={subredditVar}/>
+        </Bar>
         <Card sx={{ margin: "5%" }}>
           <Stack sx={{ display: "flex", padding: "2%", margin: "2%" }}>
             <Typography id="header" variant="h5" fontWeight="bold">

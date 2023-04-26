@@ -65,9 +65,10 @@ export function Search({ subreddit }) {
   };
 
   return (
-    <div>
+    <div style={{width: '200px'}}>
       {subreddit && (
         <Autocomplete
+          sx={{}}
           freeSolo
           options={searchResults}
           getOptionLabel={(option) =>
@@ -75,7 +76,7 @@ export function Search({ subreddit }) {
           }
           onInputChange={(event, newInputValue) => setSearchTerm(newInputValue)}
           renderInput={(params) => (
-            <TextField {...params} label="Search Posts" />
+            <TextField {...params} label="Search Posts" sx={{backgroundColor: 'white', borderRadius: '5px'}}/>
           )}
           onChange={(event, option) => handleOptionClick(option)}
         />
