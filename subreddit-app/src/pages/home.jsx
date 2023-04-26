@@ -19,6 +19,7 @@ export function Home() {
   const [subreddit, setSubreddit] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [validationError, setValidationError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const subredditOptions = ["UNC", "mildlyinfuriating"];
 
@@ -68,6 +69,7 @@ export function Home() {
         setValidationError("Subreddit names cannot contain spaces.");
       } else {
         setSubreddit(subredditName);
+        setSuccessMessage("Success! Your data is being processed.");
         setValidationError(null);
       }
     } else {
@@ -137,6 +139,21 @@ export function Home() {
             variant="filled"
           >
             {validationError}
+          </MuiAlert>
+        </Snackbar>
+        <Snackbar
+          open={!!successMessage}
+          autoHideDuration={6000}
+          onClose={() => setSuccessMessage(null)}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <MuiAlert
+            onClose={() => setSuccessMessage(null)}
+            severity="success"
+            elevation={6}
+            variant="filled"
+          >
+            {successMessage}
           </MuiAlert>
         </Snackbar>
       </Grid>
