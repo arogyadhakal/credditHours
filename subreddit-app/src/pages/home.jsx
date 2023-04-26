@@ -15,8 +15,11 @@ import { db } from "../firebase/firebase";
 import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
 
 export function Home() {
-  const [subredditData, setSubredditData] = useState({});
-  const [subreddit, setSubreddit] = useState("");
+  const [subredditData, setSubredditData] = useState({
+    subreddit: "UNC",
+    posts: [],
+  });
+  const [subreddit, setSubreddit] = useState("UNC");
   const [errorMessage, setErrorMessage] = useState(null);
   const [validationError, setValidationError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -83,6 +86,12 @@ export function Home() {
     }
   }, [subreddit]);
 
+  useEffect(() => {
+    if (subreddit) {
+      fetchSubredditPosts(subreddit);
+    }
+  }, []); // Run only once on mount
+
   console.log(subreddit);
   return (
     <>
@@ -96,7 +105,7 @@ export function Home() {
           id="combo-box-demo"
           options={subredditOptions}
           sx={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="Subreddits" />}
+          renderInput={(params) => <TextField {...params} label="UNC" />}
           onChange={(event, option) => handleOptionClick(option)}
           isOptionEqualToValue={(option, value) => option.label === value.label}
         />
