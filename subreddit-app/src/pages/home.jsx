@@ -4,9 +4,12 @@ import { Pulse } from "../components/pulse";
 import { Topics } from "../components/topics";
 import { Activity } from "../components/activity";
 import { Search } from "../components/search";
+import { PulseLineGraph } from "../components/graph";
 import React, { useState, useEffect } from "react";
 import Autocomplete from "@mui/lab/Autocomplete";
 import TextField from "@mui/material/TextField";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 import { db } from "../firebase/firebase";
 import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
@@ -14,6 +17,7 @@ import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
 export function Home() {
   const [subredditData, setSubredditData] = useState({});
   const [subreddit, setSubreddit] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const subredditOptions = ["UNC", "mildlyinfuriating"];
 
@@ -23,6 +27,11 @@ export function Home() {
       const response = await fetch(
         `http://127.0.0.1:8000/subreddit/${subredditName}`
       );
+
+      if (!response.ok) {
+        throw new Error("Error fetching subreddit posts.");
+      }
+
       const data = await response.json();
       const current_time = Math.floor(Date.now() / 1000);
 
@@ -44,8 +53,10 @@ export function Home() {
       }
 
       setSubredditData({ ...data, posts: postsWithTimeAgo });
+      setErrorMessage(null); // Reset the error message on successful fetch
     } catch (error) {
       console.error("Error fetching subreddit posts:", error);
+      setErrorMessage("Invalid subreddit name, please try again.");
     }
   };
 
@@ -80,9 +91,25 @@ export function Home() {
           onChange={(event, option) => handleOptionClick(option)}
           isOptionEqualToValue={(option, value) => option.label === value.label}
         />
+        <PulseLineGraph posts={subredditData.posts || []} />
         <Pulse posts={subredditData.posts || []} />
         <Topics posts={subredditData.posts || []} />
         <Activity posts={subredditData.posts || []} />
+        <Snackbar
+          open={!!errorMessage}
+          autoHideDuration={6000}
+          onClose={() => setErrorMessage(null)}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <MuiAlert
+            onClose={() => setErrorMessage(null)}
+            severity="error"
+            elevation={6}
+            variant="filled"
+          >
+            {errorMessage}
+          </MuiAlert>
+        </Snackbar>
       </Grid>
     </>
   );

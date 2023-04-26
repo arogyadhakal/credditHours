@@ -1,10 +1,17 @@
 import { Card, Box, Stack, Typography } from "@mui/material";
 import { SliderReddit } from "./slider";
 import React from "react";
-
-/* Only gathers the overall pulse from the posts that are fetched, not within the database.
- This will show the current overall pulse of the subreddit.
- */
+import { db } from "../firebase/firebase";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  where,
+  query,
+  orderBy,
+  limit,
+} from "firebase/firestore";
+import { useState, useEffect } from "react";
 
 function calculateAverageSentiment(posts) {
   if (posts.length === 0) {
@@ -19,17 +26,60 @@ function calculateAverageSentiment(posts) {
 }
 
 export function Pulse({ posts }) {
-  // const [averageSentiment, setAverageSentiment] = useState(0);
-  let averageSentiment;
-  if (posts) {
-    averageSentiment = calculateAverageSentiment(posts);
-    averageSentiment = Math.round(averageSentiment * 100) / 100
-    console.log("average Sentiment", averageSentiment);
-    // setAverageSentiment(average);
-  } else {
-    averageSentiment = 50;
-    // setAverageSentiment(50);
-  }
+  const [subreddit, setSubreddit] = useState("");
+  const [averageSentiment, setAverageSentiment] = useState(50);
+  const [lastSavedPulse, setLastSavedPulse] = useState(null);
+
+  useEffect(() => {
+    if (posts.length != 0) {
+      const avgSentiment = calculateAverageSentiment(posts);
+      const roundedAvgSentiment = Math.round(avgSentiment * 100) / 100;
+      setAverageSentiment(roundedAvgSentiment);
+      setSubreddit(posts[0].subreddit);
+    }
+  }, [posts]);
+
+  useEffect(() => {
+    if (subreddit) {
+      savePulsetoDB(averageSentiment);
+    }
+  }, [subreddit, averageSentiment]);
+
+  const savePulsetoDB = async (avgSentiment) => {
+    const currentDate = new Date();
+    const currentTime = currentDate.getTime();
+
+    const pulseQuery = query(
+      collection(db, "pulse"),
+      where("subreddit", "==", subreddit),
+      orderBy("timestamp", "desc"),
+      limit(1)
+    );
+
+    const querySnapshot = await getDocs(pulseQuery);
+
+    if (querySnapshot.size > 0) {
+      querySnapshot.forEach((doc) => {
+        const { timestamp } = doc.data();
+        const timeDiff = currentTime - timestamp.toMillis();
+        if (timeDiff >= 60000) {
+          addNewPulse(avgSentiment);
+        }
+      });
+    } else {
+      addNewPulse(avgSentiment);
+    }
+  };
+
+  const addNewPulse = async (avgSentiment) => {
+    const newPulse = {
+      subreddit: subreddit,
+      timestamp: new Date(),
+      sentiment: avgSentiment,
+    };
+    const pulseCollectionRef = collection(db, "pulse");
+    await addDoc(pulseCollectionRef, newPulse);
+  };
 
   return (
     <>
