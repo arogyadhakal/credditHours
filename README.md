@@ -22,7 +22,7 @@ If the dependencies were not installed after, try running this command:
 6. Within the same terminal, you will need to run the backend FastAPI server for the subreddit posts to be fetched. Run this command:
 `uvicorn main:app --reload`
 
-7. Once the backend server has began loading, open a new terminal within the project directory (/demo) and navigate to the subreddit=app directory by running:
+7. Once the backend server has began loading, open a new terminal within the project directory (/demo) and navigate to the subreddit-app directory by running:
 `cd subreddit-app`
 
 8. Once you are in the subreddit-app directory (/demo/subreddit-app), you will need to install all of the node packages by running:
