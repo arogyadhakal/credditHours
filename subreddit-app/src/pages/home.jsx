@@ -140,91 +140,75 @@ function Home() {
   console.log(subreddit);
   return (
     <>
-      {/*<Grid contaner>
-          <Grid item xs={12} sm={12}>*/}
-            <Bar posts={subredditData.posts || []} subreddit={subreddit} />
-          {/*</Grid>
-          <Grid item xs={12} sm={12}>*/}
-            <div style={{ margin: '2%', display: 'flex', justifyContent: 'center' }}>
-              <Autocomplete
-                  freeSolo
-                  disablePortal
-                  id="combo-box-demo"
-                  options={subredditOptions}
-                  sx={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} label="Choose a subreddit" sx={{backgroundColor: 'white', borderRadius: '5px'}}/>}
-                  onChange={(event, option) => handleOptionClick(option)}
-                  isOptionEqualToValue={(option, value) => option.label === value.label}
-              />
-            </div>
-          {/*</Grid>*/}
-        {subredditData.posts && (
-          <>
-            {/*<Grid item xs={12} sm={6} >
-              <Grid container>
-                <Grid ref={ref} item xs={12} sm={6} >*/}
-                  <Pulse posts={subredditData.posts || []} />
-                  <Topics posts={subredditData.posts || []} />
-                {/*</Grid>
-                <Grid item xs={12} sm={6} >*/}
-                  <Activity posts={subredditData.posts || []} />
-                {/*</Grid>
-              </Grid>
-            </Grid>
-              <Grid item xs={12} sm={12} >*/}
-              <PulseLineGraph posts={subredditData.posts || []} />
-            {/*</Grid>*/}
-          </>
-        )}
-        {!subredditData.posts && (
-          <div>Please choose a subreddit to analyze or type one in!</div>
-        )}
-        <Snackbar
-          open={!!errorMessage}
-          autoHideDuration={6000}
+      <Bar posts={subredditData.posts || []} subreddit={subreddit} />
+      <div style={{ margin: '2%', display: 'flex', justifyContent: 'center' }}>
+        <Autocomplete
+            freeSolo
+            disablePortal
+            id="combo-box-demo"
+            options={subredditOptions}
+            sx={{ width: 300 }}
+            renderInput={(params) => <TextField {...params} label="Choose a subreddit" sx={{backgroundColor: 'white', borderRadius: '5px'}}/>}
+            onChange={(event, option) => handleOptionClick(option)}
+            isOptionEqualToValue={(option, value) => option.label === value.label}
+        />
+      </div>
+      {subredditData.posts && (
+        <>
+          <Pulse posts={subredditData.posts || []} />
+          <Topics posts={subredditData.posts || []} />
+          <Activity posts={subredditData.posts || []} />
+          <PulseLineGraph posts={subredditData.posts || []} />
+        </>
+      )}
+      {!subredditData.posts && (
+        <div>Please choose a subreddit to analyze or type one in!</div>
+      )}
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={6000}
+        onClose={() => setErrorMessage(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
           onClose={() => setErrorMessage(null)}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          severity="error"
+          elevation={6}
+          variant="filled"
         >
-          <MuiAlert
-            onClose={() => setErrorMessage(null)}
-            severity="error"
-            elevation={6}
-            variant="filled"
-          >
-            {errorMessage}
-          </MuiAlert>
-        </Snackbar>
-        <Snackbar
-          open={!!validationError}
-          autoHideDuration={6000}
+          {errorMessage}
+        </MuiAlert>
+      </Snackbar>
+      <Snackbar
+        open={!!validationError}
+        autoHideDuration={6000}
+        onClose={() => setValidationError(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
           onClose={() => setValidationError(null)}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          severity="error"
+          elevation={6}
+          variant="filled"
         >
-          <MuiAlert
-            onClose={() => setValidationError(null)}
-            severity="error"
-            elevation={6}
-            variant="filled"
-          >
-            {validationError}
-          </MuiAlert>
-        </Snackbar>
-        <Snackbar
-          open={!!successMessage && !fetchError} // Only show success message when there's no fetch error
-          autoHideDuration={6000}
+          {validationError}
+        </MuiAlert>
+      </Snackbar>
+      <Snackbar
+        open={!!successMessage && !fetchError} // Only show success message when there's no fetch error
+        autoHideDuration={6000}
+        onClose={() => setSuccessMessage(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
           onClose={() => setSuccessMessage(null)}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          severity="success"
+          elevation={6}
+          variant="filled"
         >
-          <MuiAlert
-            onClose={() => setSuccessMessage(null)}
-            severity="success"
-            elevation={6}
-            variant="filled"
-          >
-            {successMessage}
-          </MuiAlert>
-        </Snackbar>
-      {/*</Grid>*/}
+          {successMessage}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 
