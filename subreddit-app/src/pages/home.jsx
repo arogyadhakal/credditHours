@@ -4,7 +4,7 @@ import { Pulse } from "../components/pulse";
 import { Topics } from "../components/topics";
 import { Activity } from "../components/activity";
 import { PulseLineGraph } from "../components/graph";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Autocomplete from "@mui/lab/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Snackbar from "@mui/material/Snackbar";
@@ -25,6 +25,8 @@ function Home() {
   const [validationError, setValidationError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [fetchError, setFetchError] = useState(false);
+
+  const ref = useRef(null)
 
   const subredditOptions = ["UNC", "mildlyinfuriating"];
 
@@ -54,8 +56,25 @@ function Home() {
 
       // Calculate timeAgo for each post
       const postsWithTimeAgo = data.posts.map((post) => {
-        const timeAgo = Math.floor((current_time - post.created_utc) / 60);
-        return { ...post, timeAgo: `${timeAgo} minutes ago` };
+        let timeAgo = Math.floor((current_time - post.created_utc) / 60);
+        if (timeAgo % 60 === 0) {
+          timeAgo = timeAgo / 60
+          return { ...post, timeAgo: `${timeAgo} hours ago`}
+        }
+        else if (timeAgo < 120 && timeAgo > 60) {
+          let minutes = timeAgo % 60
+          let hours = (timeAgo - minutes) / 60
+          return { ...post, timeAgo: `${hours} hour and ${minutes} minutes ago`}
+        }
+        else if (timeAgo > 59) {
+          let minutes = timeAgo % 60
+          let hours = (timeAgo - minutes) / 60
+          return { ...post, timeAgo: `${hours} hours and ${minutes} minutes ago`}
+        }
+        else {
+          return { ...post, timeAgo: `${timeAgo} minutes ago` };
+        }
+
       });
 
       // Add new posts to database collection
@@ -105,6 +124,7 @@ function Home() {
     if (subreddit) {
       fetchSubredditPosts(subreddit);
     }
+    
     subredditVar = subreddit
   }, [subreddit]);
 
@@ -112,6 +132,7 @@ function Home() {
     if (subreddit) {
       fetchSubredditPosts(subreddit);
     }
+    
     subredditVar = subreddit
   }, []); // Run only once on mount
 
@@ -119,26 +140,40 @@ function Home() {
   console.log(subreddit);
   return (
     <>
-      <Grid>
-          <Bar posts={subredditData.posts || []} subreddit={subreddit} />
-          <div style={{ margin: '2%', display: 'flex', justifyContent: 'center' }}>
-            <Autocomplete
-                freeSolo
-                disablePortal
-                id="combo-box-demo"
-                options={subredditOptions}
-                sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Choose a subreddit" sx={{backgroundColor: 'white', borderRadius: '5px'}}/>}
-                onChange={(event, option) => handleOptionClick(option)}
-                isOptionEqualToValue={(option, value) => option.label === value.label}
-            />
-          </div>
+      {/*<Grid contaner>
+          <Grid item xs={12} sm={12}>*/}
+            <Bar posts={subredditData.posts || []} subreddit={subreddit} />
+          {/*</Grid>
+          <Grid item xs={12} sm={12}>*/}
+            <div style={{ margin: '2%', display: 'flex', justifyContent: 'center' }}>
+              <Autocomplete
+                  freeSolo
+                  disablePortal
+                  id="combo-box-demo"
+                  options={subredditOptions}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => <TextField {...params} label="Choose a subreddit" sx={{backgroundColor: 'white', borderRadius: '5px'}}/>}
+                  onChange={(event, option) => handleOptionClick(option)}
+                  isOptionEqualToValue={(option, value) => option.label === value.label}
+              />
+            </div>
+          {/*</Grid>*/}
         {subredditData.posts && (
           <>
-              <Pulse posts={subredditData.posts || []} />
+            {/*<Grid item xs={12} sm={6} >
+              <Grid container>
+                <Grid ref={ref} item xs={12} sm={6} >*/}
+                  <Pulse posts={subredditData.posts || []} />
+                  <Topics posts={subredditData.posts || []} />
+                {/*</Grid>
+                <Grid item xs={12} sm={6} >*/}
+                  <Activity posts={subredditData.posts || []} />
+                {/*</Grid>
+              </Grid>
+            </Grid>
+              <Grid item xs={12} sm={12} >*/}
               <PulseLineGraph posts={subredditData.posts || []} />
-              <Topics posts={subredditData.posts || []} />
-              <Activity posts={subredditData.posts || []} />
+            {/*</Grid>*/}
           </>
         )}
         {!subredditData.posts && (
@@ -189,7 +224,7 @@ function Home() {
             {successMessage}
           </MuiAlert>
         </Snackbar>
-      </Grid>
+      {/*</Grid>*/}
     </>
   );
 

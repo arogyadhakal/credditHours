@@ -22,7 +22,7 @@ function filter_high_value_posts(posts) {
   });
 }
 
-export function Topics({ posts }) {
+function Topics({ posts }) {
   const [topics, setTopics] = useState();
 
   useEffect(() => {
@@ -75,3 +75,5 @@ export function Topics({ posts }) {
     </>
   );
 }
+
+export {Topics}

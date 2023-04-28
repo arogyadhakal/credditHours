@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { List, ListItem, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import {
@@ -68,7 +66,6 @@ export function Search({ subreddit }) {
     <div style={{width: '200px'}}>
       {subreddit && (
         <Autocomplete
-          sx={{}}
           freeSolo
           options={searchResults}
           getOptionLabel={(option) =>

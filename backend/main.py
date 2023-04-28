@@ -3,7 +3,7 @@ import nltk
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from reddit import reddit
-from transformers import pipeline
+#from transformers import pipeline
 from nltk.sentiment import SentimentIntensityAnalyzer
 
 app = FastAPI()

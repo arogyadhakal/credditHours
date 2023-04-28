@@ -42,7 +42,7 @@ export function Post() {
           if (tempSentimentScore > 0.0) {
             tempSentiment = "Positive"
           }
-          else if (tempSentimentScore == 0.0) {
+          else if (tempSentimentScore === 0.0) {
             tempSentiment = "Neutral"
           }
           setPostSentiment(tempSentiment)

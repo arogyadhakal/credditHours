@@ -18,18 +18,17 @@ export function Activity({ posts }) {
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
-
   return (
     <>
       <Card sx={{ margin: "5%" }}>
-        <Stack sx={{ p: 2, display: "flex" }}>
-          <Box>
+        <Stack sx={{ p: 2, display: "flex"}}>
+          <Box sx={{}}>
             <Tabs value={selectedTab} onChange={handleTabChange}>
               <Tab label="Post Activity"></Tab>
               <Tab label="User"></Tab>
             </Tabs>
             {selectedTab === 0 && (
-              <List component="nav">
+              <List component="nav" sx={{overflow: 'auto', height: '500px'}}>
                 {posts.map((post, index) => (
                   <React.Fragment key={index}>
                     <ListItem>

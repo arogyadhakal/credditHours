@@ -69,7 +69,7 @@ export function PulseLineGraph({ posts }) {
             <Line
               type="monotone"
               dataKey="sentiment"
-              stroke="#8884d8"
+              stroke="#1676D2"
               activeDot={{ r: 8 }}
             />
           </LineChart>

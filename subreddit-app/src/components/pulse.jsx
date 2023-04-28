@@ -27,11 +27,11 @@ function calculateAverageSentiment(posts) {
 
 export function Pulse({ posts }) {
   const [subreddit, setSubreddit] = useState("");
-  const [averageSentiment, setAverageSentiment] = useState(50);
-  const [lastSavedPulse, setLastSavedPulse] = useState(null);
+  const [averageSentiment, setAverageSentiment] = useState(0);
+  //const [lastSavedPulse, setLastSavedPulse] = useState(null);
 
   useEffect(() => {
-    if (posts.length != 0) {
+    if (posts.length !== 0) {
       const avgSentiment = calculateAverageSentiment(posts);
       const roundedAvgSentiment = Math.round(avgSentiment * 100) / 100;
       setAverageSentiment(roundedAvgSentiment);
